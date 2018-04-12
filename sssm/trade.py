@@ -13,6 +13,15 @@ class Trade(object):
     SELL = 1
 
     def __init__(self, trade_id, stock, trade_type, quantity, price, timestamp):
+        """ constructor
+        
+        @param trade_id - unique id for this trade
+        @param stock - name of the stock
+        @param trade_type - buy or sell indicator (Trade.BUY / Trade.SELL)
+        @param quantity - quantity traded
+        @param pice - price traded at
+        @param timestamp - integer timestamp (microseconds since epoch)
+        """
         self.id = trade_id
         self.stock = stock
         self.trade_type = trade_type

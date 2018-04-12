@@ -27,7 +27,7 @@ class Market(object):
         @param stock - Stock object
         """
         name = stock.get_name()
-        assert_true(name not in self.stocks, "duplicate stock %r" % name)
+        assert_true(name not in self.stocks, "duplicate stock: %r" % name)
         self.stocks[name] = stock
 
     def get_stock(self, name):
@@ -64,7 +64,7 @@ class Market(object):
         return new_trade
 
     def get_trades(self, stock, period=None):
-        """ get all trades for the given stock chronologically, optioanlly
+        """ get all trades for the given stock chronologically, optionally
         within the given period.
         
         @param stock - name of the stock
@@ -73,8 +73,11 @@ class Market(object):
         """
 
         def include_trade(trade):
-            """ return True to include trade if correct stock and within
-            period if given """
+            """ return True to include trade if correct stock and, optionally,
+            within period
+            
+            @param trade - the Trade object
+            """
 
             if trade.get_stock() == stock:
 
@@ -106,6 +109,7 @@ class Market(object):
             top = sum([trade.get_total_amount() for trade in trades])
             bottom = sum([trade.get_quantity() for trade in trades])
             return float(top) / bottom
+
         else:
             return None
 
@@ -117,6 +121,7 @@ class Market(object):
         """
 
         stocks = self.stocks.keys()
+        period = period or _default_period()
         vwsps = [self.calculate_vwsp(stock, period) for stock in stocks]
 
         # remove None values for stocks with no trades

@@ -22,6 +22,7 @@ def geometric_mean(ps):
     
     @param ps - list of float or integer values
     """
+
     if not ps:
         return None
 

@@ -81,10 +81,10 @@ P/E ratio for TEA at 10 pence: None
 P/E ratio for POP at 10 pence: 1.25
 P/E ratio for GIN at 10 pence: 5.0
 TEA trades:
-trade(id=0, stock=TEA, type=0, quantity=100, price=99, timestamp=1523567551269963)
-trade(id=1, stock=TEA, type=1, quantity=100, price=102, timestamp=1523567551269976)
+trade(id=0, stock=TEA, type=0, quantity=100, price=99, timestamp=1523569416196430)
+trade(id=1, stock=TEA, type=1, quantity=100, price=102, timestamp=1523569416196442)
 POP trades:
-trade(id=2, stock=POP, type=0, quantity=200, price=100, timestamp=1523567551269982)
+trade(id=2, stock=POP, type=0, quantity=200, price=100, timestamp=1523569416196448)
 GIN trades:
 VWSP for TEA: 100.5
 VWSP for POP: 100.0

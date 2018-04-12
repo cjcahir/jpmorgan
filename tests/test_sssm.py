@@ -38,7 +38,7 @@ class TestBase(unittest.TestCase):
         utils._micros_since_epoch = self._micros_since_epoch
 
     def assert_trade(self, trade, **kwargs):
-        """ assert data in given trade
+        """ assert data in given Trade object
         
         @param trade - the Trade object to assert
         @param kwargs - expected values for Trade object fields
@@ -79,7 +79,7 @@ class UtilsTests(TestBase):
 class StockTests(TestBase):
 
     def test_stock(self):
-        """ test stock object constructor """
+        """ test Stock object constructor """
         self.assertEqual(self.tea.get_name(), "TEA")
         self.assertEqual(self.tea.get_last_dividend(), 0)
         self.assertEqual(self.tea.get_fixed_dividend(), None)
@@ -143,6 +143,7 @@ class StockTests(TestBase):
 class TradeTests(TestBase):
 
     def test_trade(self):
+        """ test Trade object constructor """
         t = 10 ** 6  # epoch + 1s
         trade = Trade(0, "TEA", Trade.BUY, 1000, 100, t)
 
@@ -196,6 +197,7 @@ class MarketTests(TestBase):
             self.pop_trade_2 = record("POP", Trade.BUY, 1000, 100)
 
     def test_get_stock(self):
+        """ test getting stock by name """
         self.assertEqual(self.market.get_stock("TEA"), self.tea)
         self.assertEqual(self.market.get_stock("POP"), self.pop)
         self.assertEqual(self.market.get_stock("ALE"), self.ale)
@@ -204,12 +206,14 @@ class MarketTests(TestBase):
         self.assertEqual(self.market.get_stock("FOO"), None)
 
     def test_get_all_stocks(self):
+        """ test getting all stocks """
         stock_order = ["ALE", "GIN", "JOE", "POP", "TEA"]
         results = [self.market.get_stock(stock) for stock in stock_order]
         self.assertEqual(self.market.get_all_stocks(), results)
 
     def test_add_duplicate_stock_error(self):
-        error_regex = "duplicate stock 'TEA'"
+        """ test error when try to add duplicate named stock """
+        error_regex = "duplicate stock: 'TEA'"
 
         self.assertRaisesRegex(
             Error, error_regex, self.market.add_stock, self.tea
@@ -313,9 +317,7 @@ class MarketTests(TestBase):
         now = self.t2
         self.mock_time(now)
 
-        self.assertEqual(
-            self.market.calculate_vwsp("TEA"), 125
-            )
+        self.assertEqual(self.market.calculate_vwsp("TEA"), 125)
 
     def test_gbce_all_share_index(self):
         """ test gbce all share index calculation """
@@ -330,6 +332,9 @@ class MarketTests(TestBase):
 
         # now with trades
 
+        self.record_trades(True)
+        self.mock_time(now)
+
         # gbce_asi = geometric_mean([volume weighted stock prices])
         #
         # (ignore stocks with no trades as they don't have valid vwsp)
@@ -337,8 +342,6 @@ class MarketTests(TestBase):
         #          = geometric_mean([125, 100])
         #          = sqrt(12500)
 
-        self.record_trades(True)
-        self.mock_time(now)
         exp = 12500 ** 0.5
 
         self.assertEqual(self.market.calculate_gbce_asi(period), exp)
@@ -346,8 +349,8 @@ class MarketTests(TestBase):
     def test_gbce_all_share_index_default_value(self):
         """ test default value used when no period given """
 
-        now = self.t2
         self.record_trades(True)
+        now = self.t2
         self.mock_time(now)
         exp = 12500 ** 0.5
 
